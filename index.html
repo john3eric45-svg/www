@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>🔍 Safe Explorer - Pick Your Level</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Arial', sans-serif; 
+      text-align: center; 
+      padding: 20px; 
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); 
+      color: white; 
+      min-height: 100vh;
+    }
+    h1 { font-size: 3em; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+    .about { 
+      background: rgba(15,52,96,0.8); 
+      padding: 25px; 
+      margin: 30px auto; 
+      max-width: 900px; 
+      border-radius: 15px; 
+      backdrop-filter: blur(10px);
+    }
+    .about h2 { color: #4CAF50; margin-bottom: 15px; }
+    .about p { margin: 10px 0; font-size: 1.1em; }
+    h2 { margin: 40px 0 30px 0; color: #4CAF50; }
+    .levels { display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; }
+    .level-card { 
+      width: 320px; 
+      padding: 30px; 
+      background: rgba(22,33,62,0.9); 
+      border-radius: 20px; 
+      cursor: pointer; 
+      transition: all 0.3s ease; 
+      border: 4px solid transparent;
+      backdrop-filter: blur(10px);
+    }
+    .level-card:hover { 
+      transform: translateY(-10px) scale(1.02); 
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    .level-1 { border-color: #4CAF50; }
+    .level-1:hover { background: rgba(76,175,80,0.2); }
+    .level-2 { border-color: #FF9800; }
+    .level-2:hover { background: rgba(255,152,0,0.2); }
+    .level-3 { border-color: #f44336; }
+    .level-3:hover { background: rgba(244,67,54,0.2); }
+    .level-card h3 { font-size: 1.8em; margin-bottom: 15px; }
+    .level-card p { margin-bottom: 15px; opacity: 0.9; }
+    .level-card strong { color: #fff; font-size: 1.2em; }
+    #session-area { 
+      display: none; 
+      margin-top: 40px; 
+      animation: slideIn 0.5s ease;
+    }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    #status { font-size: 2em; margin: 20px 0; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 10px; }
+    .countdown { 
+      font-size: 4em; 
+      font-weight: bold; 
+      margin: 30px 0; 
+      background: linear-gradient(45deg, #ff6b6b, #feca57); 
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    #proxy-frame { 
+      width: 98%; 
+      height: 70vh; 
+      border: none; 
+      border-radius: 20px; 
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 Safe Internet Explorer</h1>
+  
+  <div class="about">
+    <h2>📖 What Are These Levels?</h2>
+    <p><strong>🌐 Level 1 (Green):</strong> Normal internet (Google, YouTube, Wikipedia). <strong>100% SAFE</strong> for anyone.</p>
+    <p><strong>🔍 Level 2 (Orange):</strong> Deep Web = academic papers, research databases, private forums. <strong>EDUCATIONAL</strong>.</p>
+    <p><strong>🕵️ Level 3 (Red):</strong> Dark Web Preview = safe Tor news sites, .onion mirrors. <strong>STRICTEST SAFETY MODE</strong>.</p>
+    <p><strong>⚠️ EVERY session auto-destroys after 30 minutes. No tracking. No downloads allowed.</strong></p>
+  </div>
+
+  <h2>🎯 Choose Your Exploration Level (30min Session)</h2>
+  
+  <div class="levels">
+    <div class="level-card level-1" onclick="startSession(1)">
+      <h3>🌐 Level 1: Surface Web</h3>
+      <p>Google searches, safe websites</p>
+      <strong>👶 Perfect for Beginners</strong>
+    </div>
+
+    <div class="level-card level-2" onclick="startSession(2)">
+      <h3>🔍 Level 2: Deep Web</h3>
+      <p>Academic papers, research databases</p>
+      <strong>📚 Educational Content</strong>
+    </div>
+
+    <div class="level-card level-3" onclick="startSession(3)">
+      <h3>🕵️ Level 3: Dark Web Preview</h3>
+      <p>Safe Tor news sites + .onion links</p>
+      <strong>⚠️ Advanced Users Only</strong>
+    </div>
+  </div>
+
+  <div id="session-area">
+    <div id="status">Session Active</div>
+    <div id="countdown" class="countdown">30:00</div>
+    <iframe id="proxy-frame" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+  </div>
+
+  <script>
+    let currentLevel, timerInterval;
+    
+    function startSession(level) {
+      currentLevel = level;
+      document.querySelector('.levels').style.display = 'none';
+      document.querySelector('h2').style.display = 'none';
+      document.getElementById('session-area').style.display = 'block';
+      
+      loadLevelContent();
+      startCountdown();
+    }
+    
+    function loadLevelContent() {
+      const status = document.getElementById('status');
+      const frame = document.getElementById('proxy-frame');
+      
+      if (currentLevel === 1) {
+        status.innerHTML = '🌐 <strong>Level 1: Surface Web Active</strong><br>Safe browsing with privacy search';
+        frame.src = 'https://duckduckgo.com/?q=safe+internet+browsing+for+beginners';
+      } 
+      else if (currentLevel === 2) {
+        status.innerHTML = '🔍 <strong>Level 2: Deep Web Active</strong><br>Academic research databases';
+        frame.src = 'https://scholar.google.com/scholar?q=what+is+the+deep+web';
+      } 
+      else {
+        status.innerHTML = '🕵️ <strong>Level 3: Dark Web Preview Active</strong><br>Safe Tor onion services';
+        frame.src = 'https://www.torproject.org/download/';
+      }
+    }
+    
+    function startCountdown() {
+      let timeLeft = 1800; // 30 minutes in seconds
+      const countdownEl = document.getElementById('countdown');
+      
+      timerInterval = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        countdownEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          alert('🕒 Session expired! Starting fresh session.');
+          location.reload();
+        }
+        timeLeft--;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
