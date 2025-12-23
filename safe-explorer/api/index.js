@@ -1,22 +1,17 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '..')));
 
-const SESSION_TIMEOUT = 30 * 60 * 1000;
-const activeSessions = new Map();
-
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
 app.post('/api/start-session', (req, res) => {
   const { level } = req.body;
-  const sessionId = Date.now().toString();
-  setTimeout(() => activeSessions.delete(sessionId), SESSION_TIMEOUT);
-  activeSessions.set(sessionId, { level });
-  res.json({ sessionId, timeLeft: SESSION_TIMEOUT });
+  res.json({ sessionId: Date.now().toString(), timeLeft: 30 * 60 * 1000 });
 });
 
 module.exports = app;
